@@ -179,3 +179,77 @@ if selected_game == "Kuis Tabel Periodik":
                 st.session_state.pt_q = None
                 st.session_state.pt_feedback = ""
                 st.session_state.pt_answered = False
+
+        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown(f"<div class='score-box'>🌟 Skor: {st.session_state.pt_score}/{NUM_PT}</div>", unsafe_allow_html=True)
+
+    else:
+        st.success(f"🎉 Kuis selesai! Skor akhir: {st.session_state.pt_score}/{NUM_PT}")
+        if st.button("🔁 Ulangi Kuis"):
+            for k in ["pt_score", "pt_index", "pt_q", "pt_feedback", "pt_answered"]:
+                del st.session_state[k]
+
+# === GAME 2: Kuis Senyawa Organik ===
+elif selected_game == "Kuis Senyawa Organik":
+    st.title("🧪 Kuis Senyawa Organik")
+    organic_questions = [
+        {"q":"Apa rumus molekul dari metana?","a":"CH4"},
+        {"q":"Apa gugus fungsi dari alkohol?","a":"OH"},
+        {"q":"Apa nama senyawa CH3COOH?","a":"Asam asetat"},
+        {"q":"Apa nama senyawa dengan rumus C2H5OH?","a":"Etanol"},
+        {"q":"Apa nama senyawa C6H6?","a":"Benzena"},
+        {"q":"Apa nama senyawa CH3CH2COOH?","a":"Asam propionat"},
+        {"q":"Apa nama senyawa dengan rumus CH3(CH2)2OH?","a":"Propanol"},
+        {"q":"Apa nama senyawa yang memiliki rumus C6H12O6?","a":"Glukosa"},
+        {"q":"Apa nama senyawa CH3(CH2)3OH?","a":"Butanol"},
+        {"q":"Apa nama senyawa CH3NH2?","a":"Metilamina"},
+        {"q":"Apa nama senyawa dengan rumus C5H10O?","a":"Pentanol"},
+        {"q":"Apa nama senyawa CH3CH2COCH3?","a":"Aseton"},
+        {"q":"Apa nama senyawa dengan rumus CH3(CH2)2NH?","a":"Propilamina"},
+        {"q":"Apa nama senyawa C8H10?","a":"Etilbenzen"},
+        {"q":"Apa nama senyawa HCOOH?","a":"Asam metanoatr"},
+        {"q":"Apa nama senyawa dengan rumus CH3CONH2?","a":"Etanamida"},
+        {"q":"Apa nama senyawa C3H7COOH?","a":"Asam butirat"},
+        {"q":"Apa nama senyawa CH3COOCH3?","a":"Metil asetat"},
+        {"q":"Apa nama senyawa dengan rumus CH3COOH?","a":"Asam asetat"},
+        {"q":"Apa nama senyawa CH3Cl?","a":"Metilklorida"}
+    ]
+
+    if "org_score" not in st.session_state:
+        st.session_state.org_score = 0
+        st.session_state.org_index = 0
+        st.session_state.org_feedback = ""
+        st.session_state.org_answered = False
+        st.session_state.org_questions = random.sample(organic_questions, 5)
+
+    if st.session_state.org_index < len(st.session_state.org_questions):
+        q = st.session_state.org_questions[st.session_state.org_index]
+        st.markdown('<div class="question-card">', unsafe_allow_html=True)
+        st.subheader(f"Soal #{st.session_state.org_index+1} dari 5")
+        ans_in = st.text_input(f"🔬 {q['q']}", key=f"org_in_{st.session_state.org_index}")
+
+        if st.button("Kirim Jawaban", key=f"org_sub_{st.session_state.org_index}") and not st.session_state.org_answered:
+            if ans_in.strip().lower() == q['a'].lower():
+                st.session_state.org_score += 1
+                st.session_state.org_feedback = "✅ Jawaban Benar!"
+                st.balloons()
+            else:
+                st.session_state.org_feedback = f"❌ Salah. Jawaban benar: {q['a']}"
+            st.session_state.org_answered = True
+
+        st.write(st.session_state.org_feedback)
+
+        if st.session_state.org_answered:
+            if st.button("➡ Soal Berikutnya", key=f"org_next_{st.session_state.org_index}"):
+                st.session_state.org_index += 1
+                st.session_state.org_feedback = ""
+                st.session_state.org_answered = False
+
+        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown(f"<div class='score-box'>🌟 Skor: {st.session_state.org_score}/5</div>", unsafe_allow_html=True)
+
+    else:
+        st.success(f"🎉 Kuis selesai! Skor akhir: {st.session_state.org_score}/5")
+        if st.button("🔁 Ulangi Kuis"):
+            for k in ["org_score", "org_index", "org_feedback", "org_answered", "org_questions"]:
+                del st.session_state[k]
